@@ -1,0 +1,84 @@
+.form-group {
+  display: table-row;
+}
+
+.label, .input {
+  display: table-cell;
+  width : 300px;
+}
+
+.head-select {
+  display: inline-block;
+  width:200px;
+  padding:10px;
+}
+
+.form-control-sm {
+  width:200px !important;
+}
+
+.label {
+  margin : 0 0 0 10px;
+  padding: 0 150px 0 15px;
+}
+
+.return {
+  margin: 0 0 0 10px;
+}
+.return-title {
+  cursor: pointer;
+}
+.form-control-sm.properties {
+  margin: 0 0 0 10px;
+}
+.properties-title {
+  cursor: pointer;
+}
+
+.operation {
+  display: inline-block;
+}
+
+.disabled {
+  margin-left  : 10px;
+}
+
+.advanced {
+  margin: 0 0 0 10px;
+}
+
+.advanced-title {
+  cursor: pointer;
+}
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width:100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+
+}
+/* 팝업 */
+.modal-main {
+  position:fixed;
+  background: white;
+  width: 80%;
+  height: auto;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
+}
+
+
+
