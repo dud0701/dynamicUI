@@ -1,7 +1,8 @@
+/* TODO : 수정 가능하게 */
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './DropBoxTable.css';
-import { Button } from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import Popup from '../Popup/Popup';
 
 class DropBoxTable extends Component {
@@ -40,16 +41,17 @@ class DropBoxTable extends Component {
         });
       }
 
-      handleText = (name) => {
+      handleText = (name,grp) => {
+        let variableName = "{{" + grp + "." + name + "}}";
         this.setState({ 
-          haveText: name
+          haveText: variableName
         })
       }
 
       itemList = props => {
         const list = props.map((item) => (
           <div
-            onClick={(e) => this.handleText(item.VariableName)}
+            onClick={(e) => this.handleText(item.VariableName, item.GroupName)}
             className="dropdown_item dd_row"
             key={item.VariableName}>
                 <div className="IsArray left">
@@ -90,7 +92,7 @@ class DropBoxTable extends Component {
     render() {
         const { isOpen, haveText, showWindowPortal } = this.state;
         const { handleClick,itemList, closeWindowPortal, toggleWindowPortal } = this;
-        const { data } = this.props;
+        const { data, onBlur } = this.props;
 
         return (
             <div className="input dropdwon">
@@ -98,12 +100,13 @@ class DropBoxTable extends Component {
             className={isOpen ? "dropdown active input" : "dropdown input"}
             onClick={handleClick} >
             <div className="dropdown_text">
-              {!haveText ? "Select VariableName" : haveText}
+              <Input value={!haveText ? "" : haveText}/>
             </div>
             {itemList(data.data)}
           </div>
+          {/* popoup */}
             <div className="input">
-                <Button onClick={toggleWindowPortal}>?</Button>
+                <Button onClick={toggleWindowPortal} onBlur={onBlur}>?</Button>
                 {/* TODO : modal 화면에 표시할 데이터 */}
                 {showWindowPortal && (
                               <Popup closeWindowPortal={closeWindowPortal}>

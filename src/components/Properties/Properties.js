@@ -4,7 +4,7 @@ import ElementContainer from '../../elements/ElementContainer';
 
 class Properties extends Component {
     render() {
-        const { parameters, mutually_exclusive_group, options } = this.props;
+        const { parameters, mutually_exclusive_group, options, onBlur, onTextInput } = this.props;
         return(
             <div>
                 <div className="properties">
@@ -13,20 +13,36 @@ class Properties extends Component {
                 </div>
                <div className="properties-body">
 
-                {parameters.map(data => (
-                    <ElementContainer jsonData={data} key={"a" + data.data.name} isMultiFile={data.isMultiFile}/>
+                {parameters.map((data,idx) => (
+                    <ElementContainer 
+                        jsonData={data} 
+                        key={"a" + data.data.name} 
+                        onBlur={onBlur} 
+                        isMultiFile={data.isMultiFile} 
+                        onTextInput={onTextInput}
+                        idx={idx}/>
                 ))} 
 
                 {
                      mutually_exclusive_group.length ?  
-                        mutually_exclusive_group.map(data => (
-                            <ElementContainer jsonData={data} key={"m" + data.data.name} isMultiFile={data.isMultiFile}/>
+                        mutually_exclusive_group.map((data,idx) => ( 
+                            <ElementContainer 
+                                jsonData={data} 
+                                key={"m" + data.data.name} 
+                                isMultiFile={data.isMultiFile} 
+                                onBlur={onBlur}
+                                onTextInput={onTextInput}
+                                idx={idx}/>
                         ))  : null 
                 }
                 
                 </div>
               
-                 <Advanced adData={options} mutData={mutually_exclusive_group}/> 
+                 <Advanced 
+                    adData={options} 
+                    mutData={mutually_exclusive_group} 
+                    onBlur={onBlur} 
+                    onTextInput={onTextInput}/> 
         </div>
             </div>
         )

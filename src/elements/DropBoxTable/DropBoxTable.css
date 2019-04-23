@@ -24,11 +24,12 @@ h1 {margin-top: 100px; text-align: center;
 
 .dropdown_text {
  color: black;
- padding: 10px 16px;
+ /* padding: 10px 16px; */
   cursor: pointer;
 height: auto;
 border: 1px solid #ccc;
 font-size:13px;
+width:200px;
 }
 
 .dropdown_text:hover {

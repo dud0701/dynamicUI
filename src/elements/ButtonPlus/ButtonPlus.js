@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import {Button} from 'reactstrap';
 
-const ButtonPlus = ({ onChange, name }) => {
+const ButtonPlus = ({ onChange, name, onBlur }) => {
     return(
         <div className={"button plus " + name}>
-            <Button outline color="secondary">+</Button>
+            <Button outline color="secondary" onBlur={onBlur}>+</Button>
         </div>
     )
 }

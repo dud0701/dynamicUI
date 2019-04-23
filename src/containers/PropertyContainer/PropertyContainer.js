@@ -1,3 +1,5 @@
+/* TODO : 왜 curData만 바뀌어야하는데 opReadlData까지 저절로 변경이되는거지? */
+/* TODO : operationName 은 어떻게 넘겨주는지? */
 import React, { Component } from 'react';
 import { Header, Properties, Return } from '../../components';
 import TempData from '../data';
@@ -6,9 +8,14 @@ class PropertyContainer extends Component {
 
     state = {
         curOpSelected : "Rossum",
-        opRealData : TempData[0]["argoslabs.data.rdb"],
+        opRealData : [TempData[0]["argoslabs.api.rossum"],TempData[0]["argoslabs.data.rdb"],TempData[0]["argoslabs.api.rest"],
+                    TempData[0]["argoslabs.data.excel"],TempData[0]["argoslabs.data.json"],TempData[0]["argoslabs.ai.tts"],
+                    TempData[0]["argoslabs.filesystem.op"],TempData[0]["argoslabs.filesystem.monitor"]],
+        curData : ""
+        
     }
 
+    /* TODO : jsonData 어떻게 ? */
     opType = [
         {id: 0, label: "Action", value: "Action", name:"Action"},
         {id: 1, label: "Verification", value: "Verification", name:"Verification"},
@@ -17,6 +24,7 @@ class PropertyContainer extends Component {
         {id: 4, label: "Plugins", value: "Plugins", name:"Plugins"},
       ]
 
+       /* TODO : jsonData 어떻게 ? */
       operations = [
         {id: 0, name:"Rossum", value:"Rossum", imagePath:'', label:"Rossum"},
         {id: 1, name:"SQL", value:"SQL", imagePath:"", label:"SQL"},
@@ -28,7 +36,7 @@ class PropertyContainer extends Component {
         {id: 7, name:"File Monitor", value:"File Monitor", imagePath:"",label:"File Monitor"},
       
       ]
-
+       /* TODO : jsonData 어떻게 ? */
       operation = {
         head: {
           opName : "Operation 3",
@@ -36,31 +44,42 @@ class PropertyContainer extends Component {
         }
       }
 
-      //render 후에 실행된다.
-      componentWillMount() {
-        this.afterClick();
+/*       
+        componentWillMount() {        
+        if(this.state.curData){
+          this.afterClick();
+        }
         
-      }
+      }   
+       //render 후에 실행된다.
+        componentDidMount() {
+        if(this.state.curData){
+          this.afterClick();
+        }
+        
+      }   */
 
+
+      
       //select click  한후  데이터가 바뀔 때
       //mutually_exclusive_group가 있는지 체크하고
       //json데이터에 맞게 화면이 그려지게끔 json 다시 구성
-      afterClick = () => {
-        let { opRealData } = this.state;
-        let indexArr = [];
-        let mutuallyGroup = opRealData.mutually_exclusive_group;
-        let advanRealData = opRealData.options;
-        let propRealData = opRealData.parameters;
+      afterClick = (curData) => {
+        //console.log(curData);
+        //console.log(this.state);
+        let mutuallyGroup = curData.mutually_exclusive_group;
+        let advanRealData = curData.options;
+        let propRealData = curData.parameters;
         let mutData = [];
         let mutIndex = [];
-    
+      
         //mutually_exclusive_group가 존재하는지와  required가 true일 경우 존재여부 확인 후
         if(mutuallyGroup.length > 0 && mutuallyGroup[0].required === true) {
           //option데이터에서 mutually_exclusive에 있는 name존재하는지 확인 후 해당 객체 데이터들을 mutData에 저장
             advanRealData.forEach((obj, i)=> {
             mutuallyGroup[0].options.forEach((name)=> {
               if(obj.name === name){
-                indexArr.push(i);
+                mutIndex.push(i);
                 mutData.push(obj);
               }
             });
@@ -71,29 +90,34 @@ class PropertyContainer extends Component {
           }) */
     
         }    
-           this.setState({
-          mutData : mutData,
+        this.setState({
+          mutData,
+          mutIndex 
         }); 
 
          //json데이터에 맞게 화면이 그려지게끔 json 다시 구성
-         //TODO : 하나로 할 수 있도로 고치자
-        this.handleJson(propRealData, indexArr, "parameters");
-        this.handleJson(advanRealData,indexArr,"options");
+         //TODO : 하나로 할 수 있도로 고쳐?
+        this.handleJson(propRealData, mutIndex, "parameters");
+        this.handleJson(advanRealData,mutIndex,"options");
         this.handleJson(mutData,mutIndex,"mutually_exclusive_group");
 
       }
 
       //head의 operation select 이벤트
     handleOpSelectChange = e => {
-        let dataArr = ["argoslabs.api.rossum","argoslabs.data.rdb","argoslabs.api.rest","argoslabs.data.excel","argoslabs.data.json","argoslabs.filesystem.monitor","argoslabs.filesystem.op","argoslabs.ai.tts" ]
-        let test = TempData[0][dataArr[e.id]];
+        //let dataArr = ["argoslabs.api.rossum","argoslabs.data.rdb","argoslabs.api.rest","argoslabs.data.excel","argoslabs.data.json","argoslabs.filesystem.monitor","argoslabs.filesystem.op","argoslabs.ai.tts" ]
+        let selectId = e.id; //selected id
+        let curData = this.state.opRealData[selectId]; //셀렉트된 데이터들을 curData로 담아준다.
+        //let opRealDataCopy = Object.assign({}, this.state.opRealData); //state의 opRealData 복사
+       // opRealDataCopy[selectId] = this.state.curData; //이전의 curData를 opRealData에 넣는다.
+
         this.setState({
         curOpSelected: e.value,
-        opRealData :test
+        curData :curData,
+        /* opRealData : opRealDataCopy */
         });
-        this.afterClick();
+        this.afterClick(curData);
     }
-
 
 
     //실제 json데이터를 체크해서 input, label type지정해서 json 다시 만들기?
@@ -104,14 +128,12 @@ class PropertyContainer extends Component {
          jsonData.forEach(function(obj, index){
              //option(advanced)인 경우 label은 checkbox, prameter일 경우 label은 text, mutually~일 경우 label=radio
              let inputType = "";
-             let labelType=labelEx[0][flag]; //labe_type 처리 => mutually option 둘 중 하나만 선택(radio)
+             let labelType=labelEx[0][flag]; //label m, _type 처리 => mutually option 둘 중 하나만 선택(radio)
              let isMutData =false;
              let isMultiFile = false;
+             let mutIdx = "";
          
-          
-             //type, choices처리 -> input_type
-
-             //inputdl 없는 경우 처리
+             //input이 없는 경우 처리
              if(obj.type === "bool" || obj.type === "str2bool") {
                // console.log("none");
                  inputType = "none";
@@ -130,7 +152,6 @@ class PropertyContainer extends Component {
                   }
                   //input이 file인 경우
                   else if(obj.input_method === "fileread") {
-                      //TODO : Multi File 구현하기 (file에 같이 구현할지? 아니면 따로 컴포넌트 만들지 ?)
                       isMultiFile = obj.action === "append" ? true : false; //input이 file인지 multi file인지 구분
                       inputType = "InputFile";
                   }
@@ -153,14 +174,20 @@ class PropertyContainer extends Component {
             //advanced data에 mutually Data인것을 표기
             if(flag === "options") {
                for(let i=0;i<mutIndex.length; i++) {
-                   if(mutIndex[i] == index) {
+                   if(mutIndex[i] === index) {
                        isMutData = true;
+                       mutIdx = mutIndex[i];
                    }
-               }
- 
+               } 
             }
  
-            temp.push({input_type: inputType, label_type: labelType, data: obj, isMutData: isMutData, isMultiFile: isMultiFile});            
+            temp.push({input_type: inputType, 
+                        label_type: labelType, 
+                        data: obj, 
+                        isMutData: isMutData, 
+                        isMultiFile: isMultiFile, 
+                        dataType:flag, 
+                        mutIdx : mutIdx});            
          })
          
          this.setState ({
@@ -169,24 +196,76 @@ class PropertyContainer extends Component {
      }
 
       
-  //TODO : input 이벤트 
+  //TODO : inputbox(text) 이벤트
+  //option의 text input change 이벤트
+  handleOptionsTextInput = (e,name, i) => {
+  
+    
+  }
+  //param의 text input change 이벤트
+  handleTextInput = (e,i,dataType) => {
+    //e.persist();
+    let stateDataCopy = Object.assign({}, this.state.curData);
+
+    if(dataType === "parameters") {
+      stateDataCopy.parameters[i].value = e.target.value;
+    }
+
+    if(dataType === "options") {
+      stateDataCopy.options[i].value = e.target.value;
+    }
+
+     if(dataType === "mutually_exclusive_group") {
+      //stateDataCopy.options
+    }
+    
+    this.setState({
+      curData : stateDataCopy
+    })     
+  }
+
+  //TODO : inputbox List(text) 
   //TODO : check box 이벤트 
   //TODO : select 이벤트
   //TODO : dropdown 이벤트
   //TODO : file 이벤트
   //TODO : radio 이벤트
   //TODO : 멀티 input 이벤트 -> setstate과정을 여기서해
+
+  handleBlur = (e) => {
+    //console.log(this.state);
+   // console.log("a");
+   /*  var currTarget = e.currentTarget;
+    setTimeout(function() {
+      if (!currTarget.contains(document.activeElement)) {
+          console.log('component officially blurred');
+      }
+    }, 0); */
+}
      
 
     render () {
 
-        const { opType, handleOpSelectChange, operations, operation } = this;
+        const { opType, handleOpSelectChange, operations, operation, handleBlur, handleTextInput } = this;
         const { mutually_exclusive_group,  options, parameters } = this.state;
         return (
             <div className="start">
-                <Header opType={opType} onOpChange={handleOpSelectChange} operations={operations} operation={operation}/>
-                <Properties parameters={parameters} mutually_exclusive_group={mutually_exclusive_group} options={options}/>
+                <Header 
+                  opType={opType} 
+                  onOpChange={handleOpSelectChange} 
+                  operations={operations} 
+                  operation={operation}/>
+                {parameters  
+                ? <Properties 
+                  parameters={parameters} 
+                  mutually_exclusive_group={mutually_exclusive_group} 
+                  options={options} 
+                  onBlur={handleBlur}
+                  onTextInput ={handleTextInput}/>
+                :null}
+                {/*TODO :  jsonData어떤식으로  return? */}
                 <Return/>
+                {/* <pre style={{marginTop: '1em'}}>{JSON.stringify(this.state.opRealData[1].parameters, null, '\t')}</pre> */}
             </div>
 
         )

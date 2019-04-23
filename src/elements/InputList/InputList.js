@@ -32,7 +32,7 @@ class InputList extends Component {
     })
   }
      render()  {
-         const { data, value, name, disabled, onChange } = this.props;
+         const { data, value, name, disabled, onChange, onBlur } = this.props;
          const { handlePlusButton, handleInpuChange, handleRemoveInput } = this;
          const { fields } = this.state;
          const isFormGroupDeletionAllowed = fields.length > 1 ? false : true; 
@@ -46,16 +46,21 @@ class InputList extends Component {
                  name={data.name + index}
                  onChange={(e) => handleInpuChange(index, e)}
                  value={value}
+                 onBlur={onBlur}
                  bsSize="sm"
                />
                {/* TODO : CSS로 X버튼 input안으로 넣기 */}
-                <Button className="remove_button" onClick={(e)=>handleRemoveInput(index)} disabled={index === 0 ? isFormGroupDeletionAllowed : undefined}>X</Button>
+                <Button 
+                  className="remove_button" 
+                  onClick={(e)=>handleRemoveInput(index)} 
+                  disabled={index === 0 ? isFormGroupDeletionAllowed : undefined} 
+                  onBlur={onBlur}>X</Button>
                </div>
                
             )) }
           </div>
            <div className="input button">
-                <Button onClick={handlePlusButton}>+</Button>
+                <Button onClick={handlePlusButton} onBlur={onBlur}>+</Button>
           </div> 
           </div>
 

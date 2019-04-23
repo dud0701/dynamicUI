@@ -11,7 +11,8 @@ const InputNumber = ({
   disabled,
   onChange,
   min_value,
-  max_value
+  max_value,
+  onBlur
 }) => {
   return (
     <div className={"input number " + data.name}>
@@ -24,6 +25,7 @@ const InputNumber = ({
         name={data.name}
         onChange={onChange}
         value={data.value}
+        onBlur={onBlur}
         bsSize="sm"
       />
     </div>

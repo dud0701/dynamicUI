@@ -1,7 +1,7 @@
 import React,{ Component } from 'react';
 import { Input, Label } from 'reactstrap'; 
 
-const LabelRadio = ({ data, name, onChange, disabled }) => {
+const LabelRadio = ({ data, name, onChange, disabled, onBlur }) => {
     return(
         <div className={"label radio " + data.name}>
             <Label check>
@@ -9,7 +9,9 @@ const LabelRadio = ({ data, name, onChange, disabled }) => {
                     type="radio" 
                     name={data.name} 
                     onChange={onChange} 
-                    disabled={disabled}/> 
+                    disabled={disabled}
+                    onBlur={onBlur}
+                    /> 
                     {data.name}
             </Label>
         </div>

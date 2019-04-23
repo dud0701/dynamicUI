@@ -4,13 +4,13 @@ import PropTypes from "prop-types";
 import { Input, Row, Button } from "reactstrap";
 import * as Elem from "./index";
 
-const ElementContainer = ({ jsonData, onChange }) => {
+const ElementContainer = ({ jsonData, onChange, onBlur, onTextInput,idx }) => {
   let { input_type, label_type, ...others } = jsonData;
  
    //label
   if (Elem[label_type]) {
     let comp = Elem[label_type];
-    let pros = { ...others };
+    let pros = { onBlur,onChange, ...others };
     var label = React.createElement(comp, { ...pros });
   }
 
@@ -19,7 +19,7 @@ const ElementContainer = ({ jsonData, onChange }) => {
   //input
    if (Elem[input_type]) {
     let comp = Elem[input_type];
-    let pros = { onChange, ...others };
+    let pros = { onChange, onBlur, onTextInput, idx, ...others };
     var input = React.createElement(comp, { ...pros });
   }
   

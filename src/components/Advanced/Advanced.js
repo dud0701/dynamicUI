@@ -22,7 +22,7 @@ class Advanced extends Component {
     }
 
     render() {
-        const { adData, mutIndex, mutData } = this.props;
+        const { adData, onBlur, onTextInput, mutIdx } = this.props;
         return( 
             <div className="advanced">
                 <div className="advanced-title" onClick={this.handlePanel}>
@@ -30,10 +30,17 @@ class Advanced extends Component {
                 </div>
                <div className="advanced-body">
                      {this.state.open && 
-                         adData.map(data => (
+                         adData.map((data,idx) => (
                              data.data.is_visible && !data.isMutData?
-                                <ElementContainer jsonData={data} key={"a" + data.data.name} isMultiFile={data.isMultiFile}/> :
-                                null
+                                <ElementContainer 
+                                    jsonData={data} 
+                                    key={"a" + data.data.name} 
+                                    isMultiFile={data.isMultiFile} 
+                                    onBlur={onBlur}
+                                    onTextInput={onTextInput}
+                                    idx={idx}
+                                    mutIdx={mutIdx}/> 
+                                    : null
                         ))
                         
                     } 

@@ -63,23 +63,23 @@ class InputFile extends Component {
   render() {
     const { fileName, fileNames } = this.state;
     const { handleFileName } = this; 
-    const { data, isMultiFile, value, name, disabled, onChange } = this.props;
+    const { data, isMultiFile, value, name, disabled, onChange, onBlur } = this.props;
  
     return(
       <div className={"input file " + data.name}>
       <div className="a">
         {fileNames.length > 0 ? 
             fileNames.map((file)=>(
-              <Input type="text" id="fileName" bsSize="sm" className="file_input_textbox" value={file}/> 
+              <Input type="text" id="fileName" bsSize="sm" className="file_input_textbox" value={file} onBlur={onBlur}/> 
             )) 
-            : <Input type="text" id="fileName" bsSize="sm" className="file_input_textbox" value={fileName}/>   
+            : <Input type="text" id="fileName" bsSize="sm" className="file_input_textbox" value={fileName} onBlur={onBlur}/>   
         }
       {/*   <Input type="text" id="fileName" bsSize="sm" className="file_input_textbox" value={fileName}/>     */} 
         </div>
         <div className="file_input_div">
        
-      <Input type="button" value="..." className="file_input_button" />     
-      <Input type="file" className="file_input_hidden" id="text1" onChange={(e) => handleFileName(e)} bsSize="sm" multiple={isMultiFile}/>
+      <Input type="button" value="..." className="file_input_button" onBlur={onBlur}/>     
+      <Input type="file" className="file_input_hidden" id="text1" onChange={(e) => handleFileName(e)} bsSize="sm" multiple={isMultiFile} onBlur={onBlur}/>
     </div> 
       </div>
       
