@@ -6,13 +6,10 @@ import { Input } from "reactstrap";
 
 const InputNumber = ({
   data,
-  value,
-  name,
   disabled,
   onChange,
-  min_value,
-  max_value,
-  onBlur
+  onBlur,
+  dataType
 }) => {
   return (
     <div className={"input number " + data.name}>
@@ -21,7 +18,7 @@ const InputNumber = ({
         step="1"
         min={data.min_value}
         max={data.max_value}
-        disabled={disabled}
+        /* disabled={dataType === "options" ? true : false} */
         name={data.name}
         onChange={onChange}
         value={data.value}

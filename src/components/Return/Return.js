@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { Input } from 'reactstrap';
 import ElementContainer from '../../elements/ElementContainer';
 
 class Return extends Component {
     state = {
-        currentSelected:'String',
+        currentSelected:"",
     }
 
     
@@ -51,6 +52,7 @@ class Return extends Component {
 
     render() {
         const { returnDatas, handleSelectChange, stringProp, csvProp, fileProp } = this;
+        const { onBlur } = this.props;
         return( 
             <div className="return">
                 <div className="return-title" onClick={this.handlePanel}>
@@ -58,7 +60,22 @@ class Return extends Component {
                 </div>
                <div className="return-body">
                
-                <ElementContainer jsonData={returnDatas} onChange={handleSelectChange} />
+                {/* <ElementContainer jsonData={returnDatas} onChange={handleSelectChange} /> */}
+                <div className="label">
+                    ResultType
+                </div>
+                <div className={"input select " + returnDatas.name}>
+                    <Input type="select" name={returnDatas.name} onChange={handleSelectChange} value={this.state.currentSelected} onBlur={onBlur} bsSize="sm">
+                        <option value="" selected disabled hidden>Select an Option</option>
+                            {returnDatas.data.choices.map(( index ) => {
+                              return (
+                                <option value={index}>
+                                  {index}
+                                </option>
+                              );
+                            })}
+                    </Input>
+                </div>
                
                     {
                         this.state.currentSelected === "String" ?

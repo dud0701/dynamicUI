@@ -32,7 +32,7 @@ class InputList extends Component {
     })
   }
      render()  {
-         const { data, value, name, disabled, onChange, onBlur } = this.props;
+         const { data, onBlur, dataType } = this.props;
          const { handlePlusButton, handleInpuChange, handleRemoveInput } = this;
          const { fields } = this.state;
          const isFormGroupDeletionAllowed = fields.length > 1 ? false : true; 
@@ -47,6 +47,7 @@ class InputList extends Component {
                  onChange={(e) => handleInpuChange(index, e)}
                  value={value}
                  onBlur={onBlur}
+                 /* disabled={dataType === "options" ? true : false} */
                  bsSize="sm"
                />
                {/* TODO : CSS로 X버튼 input안으로 넣기 */}
@@ -60,7 +61,10 @@ class InputList extends Component {
             )) }
           </div>
            <div className="input button">
-                <Button onClick={handlePlusButton} onBlur={onBlur}>+</Button>
+                <Button 
+                  onClick={handlePlusButton} 
+                  onBlur={onBlur} 
+                 /*  disabled={dataType === "options" ? true : false} */>+</Button>
           </div> 
           </div>
 

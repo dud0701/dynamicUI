@@ -4,7 +4,13 @@ import ElementContainer from '../../elements/ElementContainer';
 
 class Properties extends Component {
     render() {
-        const { parameters, mutually_exclusive_group, options, onBlur, onTextInput } = this.props;
+        const { 
+            parameters, 
+            mutually_exclusive_group, 
+            options, 
+            onBlur, 
+            onTextInput,
+            mutIndex } = this.props;
         return(
             <div>
                 <div className="properties">
@@ -29,10 +35,10 @@ class Properties extends Component {
                             <ElementContainer 
                                 jsonData={data} 
                                 key={"m" + data.data.name} 
-                                isMultiFile={data.isMultiFile} 
+                                isMultiFile={data.isMultiFile}  
                                 onBlur={onBlur}
                                 onTextInput={onTextInput}
-                                idx={idx}/>
+                                idx={mutIndex[idx]}/>
                         ))  : null 
                 }
                 

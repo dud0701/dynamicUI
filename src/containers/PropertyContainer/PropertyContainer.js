@@ -7,7 +7,7 @@ import TempData from '../data';
 class PropertyContainer extends Component {
 
     state = {
-        curOpSelected : "Rossum",
+        curOpSelected : "",
         opRealData : [TempData[0]["argoslabs.api.rossum"],TempData[0]["argoslabs.data.rdb"],TempData[0]["argoslabs.api.rest"],
                     TempData[0]["argoslabs.data.excel"],TempData[0]["argoslabs.data.json"],TempData[0]["argoslabs.ai.tts"],
                     TempData[0]["argoslabs.filesystem.op"],TempData[0]["argoslabs.filesystem.monitor"]],
@@ -132,6 +132,7 @@ class PropertyContainer extends Component {
              let isMutData =false;
              let isMultiFile = false;
              let mutIdx = "";
+             let isDisabled = false;
          
              //input이 없는 경우 처리
              if(obj.type === "bool" || obj.type === "str2bool") {
@@ -177,6 +178,8 @@ class PropertyContainer extends Component {
                    if(mutIndex[i] === index) {
                        isMutData = true;
                        mutIdx = mutIndex[i];
+                       isDisabled = true;
+                       
                    }
                } 
             }
@@ -187,7 +190,8 @@ class PropertyContainer extends Component {
                         isMutData: isMutData, 
                         isMultiFile: isMultiFile, 
                         dataType:flag, 
-                        mutIdx : mutIdx});            
+                        mutIdx : mutIdx,
+                        isDisabled : isDisabled});            
          })
          
          this.setState ({
@@ -202,10 +206,11 @@ class PropertyContainer extends Component {
   
     
   }
-  //param의 text input change 이벤트
+  //text input change 이벤트, select도 
   handleTextInput = (e,i,dataType) => {
     //e.persist();
     let stateDataCopy = Object.assign({}, this.state.curData);
+    console.log(i);
 
     if(dataType === "parameters") {
       stateDataCopy.parameters[i].value = e.target.value;
@@ -215,14 +220,23 @@ class PropertyContainer extends Component {
       stateDataCopy.options[i].value = e.target.value;
     }
 
-     if(dataType === "mutually_exclusive_group") {
-      //stateDataCopy.options
-    }
+    if(dataType === "mutually_exclusive_group") {
+      stateDataCopy.options[i].value = e.target.value;
+    } 
+
+    //return 일 경우 처리
     
     this.setState({
       curData : stateDataCopy
     })     
   }
+
+  //checkbox change 이벤트
+  handleCheckbox = (e,i,dataType) => {
+    
+  }
+
+
 
   //TODO : inputbox List(text) 
   //TODO : check box 이벤트 
@@ -246,8 +260,19 @@ class PropertyContainer extends Component {
 
     render () {
 
-        const { opType, handleOpSelectChange, operations, operation, handleBlur, handleTextInput } = this;
-        const { mutually_exclusive_group,  options, parameters } = this.state;
+        const { 
+          opType, 
+          handleOpSelectChange, 
+          operations, 
+          operation, 
+          handleBlur, 
+          handleTextInput, 
+          handleCheckbox} = this;
+        const { 
+          mutually_exclusive_group,  
+          options, 
+          parameters, 
+          mutIndex } = this.state;  
         return (
             <div className="start">
                 <Header 
@@ -261,10 +286,12 @@ class PropertyContainer extends Component {
                   mutually_exclusive_group={mutually_exclusive_group} 
                   options={options} 
                   onBlur={handleBlur}
-                  onTextInput ={handleTextInput}/>
+                  onTextInput ={handleTextInput}
+                  onCheckbox = {handleCheckbox}
+                  mutIndex={mutIndex}/>
                 :null}
                 {/*TODO :  jsonData어떤식으로  return? */}
-                <Return/>
+                <Return onBlur={handleBlur}/>
                 {/* <pre style={{marginTop: '1em'}}>{JSON.stringify(this.state.opRealData[1].parameters, null, '\t')}</pre> */}
             </div>
 
